@@ -56,6 +56,8 @@ The Mentor Scoring System is an intelligent platform designed to evaluate and im
 
 ### System Architecture Diagram
 
+![System Architecture - Mentor Scoring System](./Architecture_diagram.jpeg)
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Frontend (Vercel)                             │
