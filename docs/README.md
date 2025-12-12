@@ -213,6 +213,8 @@ Output: A generated Teacher Persona that can produce scripts, answer questions, 
 
 ### Example Credentials (for testing)
 
+⚠️ **Note:** User registration is not available. You must login using the predefined credentials below. There is no self-signup endpoint.
+
 Use these example accounts for local testing or demo purposes only. Do NOT use them in production.
 
 - Mentor: `mentor@example.com` / `mentor123`
