@@ -211,6 +211,14 @@ Output: A generated Teacher Persona that can produce scripts, answer questions, 
 - **Google Gemini API** key (for AI analysis)
 - **Git** for version control
 
+### Example Credentials (for testing)
+
+Use these example accounts for local testing or demo purposes only. Do NOT use them in production.
+
+- Mentor: `mentor@example.com` / `mentor123`
+- Student: `student@example.com` / `student123`
+- University: `university@@example.com` / `university123`
+
 ### Backend Setup
 
 #### 1. Clone Repository
@@ -346,6 +354,9 @@ npm run dev
 | Cloudinary upload fails | Verify API key and secret in `.env` |
 | Gemini API errors | Check API key validity and quota |
 | MongoDB connection fails | Verify connection string and IP whitelist |
+| Render free-tier timeouts / cold starts | The backend is hosted on Render's free tier which may spin down idle instances. The first 2–3 requests after idle can time out while the instance spins up. Retry the request after a few seconds; consider using a warmup/ping service or upgrading the instance for production. |
+| Video not playable (timed-out or loading issues) | If the backend was asleep or request timed out during processing, video playback links may fail temporarily. Wait a few seconds and reload the session page. Re-uploading the video or re-processing the session usually resolves the issue. |
+| Large ML model / tunneling in use | The ML model Docker image is ~15GB and cannot be hosted on the free instance directly. For demos we use tunneling (external ML host or remote tunnel). This means analysis may be delayed or routed through a tunnel — see deployment notes for details. |
 
 ---
 
