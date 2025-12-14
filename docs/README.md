@@ -58,6 +58,9 @@ The Mentor Scoring System is an intelligent platform designed to evaluate and im
 
 ![System Architecture - Mentor Scoring System](./Architecture_diagram.jpeg)
 
+#### 1. Login Page
+![Login Page](./login_page.png)
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    Frontend (Vercel)                             │
@@ -106,6 +109,36 @@ The Mentor Scoring System is an intelligent platform designed to evaluate and im
                               │ (Persistent)   │         │ (AI Summary) │
                               └────────────────┘         └──────────────┘
 ```
+
+#### 2. Mentor Dashboard
+![Mentor Dashboard](./mentor_dashboard.png)
+
+#### 3. Mentor Dashboard - Sessions View
+![Mentor Dashboard 2](./mentor_dashboard_2.png)
+
+#### 4. Mentor Session Breakdown - Main View
+![Session Breakdown](./mentor_session_breakdown.png)
+
+#### 5. Mentor Session Breakdown - Detailed Analysis
+![Session Breakdown 2](./mentor_session_breakdown_2.png)
+
+#### 6. Mentor Session Breakdown - Advanced Metrics
+![Session Breakdown 3](./mentor_session_breakdown_3.png)
+
+#### 7. Mentor Session Breakdown - Timeline View
+![Session Breakdown 4](./mentor_session_breakdown_4.png)
+
+#### 8. Mentor Session Breakdown - Final Summary
+![Session Breakdown 5](./mentor_session_breakdown_5.png)
+
+#### 9. Mentor Profile
+![Mentor Profile](./mentor_profile.png)
+
+#### 10. Public Dashboard Leaderboard
+![Public Dashboard](./public_dashboard.png)
+
+#### 11. AI Voice Clone - Student Dashboard
+![AI Voice Clone - Student Dashboard](./mentor_ai_voice_clone_student_dashboard.png)
 
 ### Data Flow
 
@@ -210,6 +243,16 @@ Output: A generated Teacher Persona that can produce scripts, answer questions, 
 - **Cloudinary** account (for video storage)
 - **Google Gemini API** key (for AI analysis)
 - **Git** for version control
+
+### Example Credentials (for testing)
+
+⚠️ **Note:** User registration is not available. You must login using the predefined credentials below. There is no self-signup endpoint.
+
+Use these example accounts for local testing or demo purposes only. Do NOT use them in production.
+
+- Mentor: `mentor@example.com` / `mentor123`
+- Student: `student@example.com` / `student123`
+- University: `university@@example.com` / `university123`
 
 ### Backend Setup
 
@@ -346,6 +389,9 @@ npm run dev
 | Cloudinary upload fails | Verify API key and secret in `.env` |
 | Gemini API errors | Check API key validity and quota |
 | MongoDB connection fails | Verify connection string and IP whitelist |
+| Render free-tier timeouts / cold starts | The backend is hosted on Render's free tier which may spin down idle instances. The first 2–3 requests after idle can time out while the instance spins up. Retry the request after a few seconds; consider using a warmup/ping service or upgrading the instance for production. |
+| Video not playable (timed-out or loading issues) | If the backend was asleep or request timed out during processing, video playback links may fail temporarily. Wait a few seconds and reload the session page. Re-uploading the video or re-processing the session usually resolves the issue. |
+| Large ML model / tunneling in use | The ML model Docker image is ~15GB and cannot be hosted on the free instance directly. For demos we use tunneling (external ML host or remote tunnel). This means analysis may be delayed or routed through a tunnel — see deployment notes for details. |
 
 ---
 
