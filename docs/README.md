@@ -6,6 +6,7 @@
 
 - [Project Overview](#project-overview)
 - [Architecture](#architecture)
+- [External Services](#external-services)
 - [Setup Instructions](#setup-instructions)
 - [Running Locally](#running-locally)
 - [API Endpoints](#api-endpoints)
@@ -173,6 +174,52 @@ The Mentor Scoring System is an intelligent platform designed to evaluate and im
 
 ---
 
+## External Services
+
+The Mentor Scoring System integrates with several external microservices for specialized AI analysis. These services are maintained as separate repositories:
+
+### 1. Video Analysis Service
+**Repository**: [HCLTech_TechFest](https://github.com/DikshantBadawadagi/HCLTech_TechFest)
+
+Handles comprehensive video content analysis including:
+- Visual quality assessment
+- Gesture and body language detection
+- Eye contact tracking
+- On-screen content recognition (OCR)
+- Engagement metric extraction
+- Technical depth scoring
+
+### 2. Speaker Diarization Service
+**Repository**: [Video_Time_Stamp_Diarization_MultilingualASR](https://github.com/DikshantBadawadagi/Video_Time_Stamp_Diarization_MultilingualASR)
+
+Provides multilingual audio processing capabilities:
+- Speaker identification and separation
+- Timestamp-accurate transcription
+- Multi-speaker conversation analysis
+- Language detection and ASR
+- Pause and pace analysis
+- Audio quality metrics
+
+### 3. AI Voice Clone Service
+**Repository**: [voice_clone_api](https://github.com/Hardikr439/voice_clone_api)
+
+Enables personalized text-to-speech generation:
+- Voice model training from mentor recordings
+- Natural speech synthesis
+- Multiple language support
+- Customizable voice parameters (tone, speed, emphasis)
+- Teacher persona generation
+
+### Integration Notes
+
+- All external services communicate with the main backend via REST APIs
+- The services are designed to be containerized (Docker) for scalability
+- Large ML models (~15GB) are hosted separately to work around deployment constraints
+- ngrok tunneling is used for development/demo environments
+- Production deployments may require dedicated hosting for ML services
+
+---
+
 ## Tech Stack & Evaluation Pipeline
 
 Our ML evaluation system scores a session across five core dimensions, each powered by specialized models and signal-processing techniques.
@@ -291,6 +338,11 @@ CLOUDINARY_API_SECRET=your_api_secret
 # AI/APIs
 GEMINI_API_KEY=your_gemini_api_key
 
+# External Service URLs (optional - for custom deployments)
+ANALYSIS_API_URL=http://localhost:8000
+DIARIZATION_API_URL=http://localhost:8001
+VOICE_CLONE_API_URL=http://localhost:8002
+
 # Server
 FLASK_ENV=development
 FLASK_PORT=5000
@@ -341,6 +393,41 @@ npm run dev
 
 Frontend will run on `http://localhost:3000`
 
+### External Services Setup (Optional)
+
+To run the complete system with all analysis services locally:
+
+#### 1. Clone External Service Repositories
+
+```bash
+# Video Analysis Service
+git clone https://github.com/DikshantBadawadagi/HCLTech_TechFest.git
+cd HCLTech_TechFest
+# Follow setup instructions in repository
+
+# Speaker Diarization Service
+git clone https://github.com/DikshantBadawadagi/Video_Time_Stamp_Diarization_MultilingualASR.git
+cd Video_Time_Stamp_Diarization_MultilingualASR
+# Follow setup instructions in repository
+
+# AI Voice Clone Service
+git clone https://github.com/Hardikr439/voice_clone_api.git
+cd voice_clone_api
+# Follow setup instructions in repository
+```
+
+#### 2. Update Backend Configuration
+
+Update your backend `.env` file with the local service URLs:
+
+```env
+ANALYSIS_API_URL=http://localhost:8000
+DIARIZATION_API_URL=http://localhost:8001
+VOICE_CLONE_API_URL=http://localhost:8002
+```
+
+**Note**: These services have substantial ML model requirements. For development/demo purposes, using hosted versions or ngrok tunnels is recommended.
+
 ---
 
 ## Running Locally
@@ -389,9 +476,6 @@ npm run dev
 | Cloudinary upload fails | Verify API key and secret in `.env` |
 | Gemini API errors | Check API key validity and quota |
 | MongoDB connection fails | Verify connection string and IP whitelist |
-| Render free-tier timeouts / cold starts | The backend is hosted on Render's free tier which may spin down idle instances. The first 2–3 requests after idle can time out while the instance spins up. Retry the request after a few seconds; consider using a warmup/ping service or upgrading the instance for production. |
-| Video not playable (timed-out or loading issues) | If the backend was asleep or request timed out during processing, video playback links may fail temporarily. Wait a few seconds and reload the session page. Re-uploading the video or re-processing the session usually resolves the issue. |
-| Large ML model / tunneling in use | The ML model Docker image is ~15GB and cannot be hosted on the free instance directly. For demos we use tunneling (external ML host or remote tunnel). This means analysis may be delayed or routed through a tunnel — see deployment notes for details. |
 
 ---
 
@@ -859,13 +943,14 @@ python-dotenv==1.0.0
 
 ### External Services
 
-| Service | Purpose | Version |
-|---------|---------|---------|
-| MongoDB Atlas | Database | Latest |
-| Cloudinary | Video Storage | API v1.1 |
-| Google Gemini | AI Analysis | 2.5-flash |
-| Analysis API | Video Understanding | Custom |
-| Diarization API | Speaker Detection | Custom |
+| Service | Purpose | Repository | Version |
+|---------|---------|------------|---------|
+| MongoDB Atlas | Database | - | Latest |
+| Cloudinary | Video Storage | - | API v1.1 |
+| Google Gemini | AI Analysis | - | 2.5-flash |
+| Analysis API | Video Understanding | [HCLTech_TechFest](https://github.com/DikshantBadawadagi/HCLTech_TechFest) | Custom |
+| Diarization API | Speaker Detection | [Video_Time_Stamp_Diarization_MultilingualASR](https://github.com/DikshantBadawadagi/Video_Time_Stamp_Diarization_MultilingualASR) | Custom |
+| Voice Clone API | Text-to-Speech | [voice_clone_api](https://github.com/Hardikr439/voice_clone_api) | Custom |
 
 ---
 
@@ -878,6 +963,16 @@ python-dotenv==1.0.0
   - Backend API design and Flask implementation
   - Database schema and MongoDB integration
   - Deployment to Vercel and Render
+
+- **Dikshant Badawadagi** - ML/AI Engineer
+  - Video analysis service development
+  - Speaker diarization implementation
+  - Multilingual ASR integration
+
+- **Hardik** - AI Engineer
+  - AI voice clone service development
+  - Text-to-speech model integration
+  - Voice parameter optimization
 
 - **Contributors**
   - AI integration with Google Gemini
@@ -896,7 +991,7 @@ python-dotenv==1.0.0
 
 For issues, questions, or contributions:
 - **GitHub**: [mentor-scoring-system](https://github.com/Himanshu1198/)
-- **Email**: himanshu@example.com
+- **Email**: himanshumain97@gmail.com
 - **Issues**: [GitHub Issues](https://github.com/Himanshu1198/Final_version_techfest_IIT_bombay_HCL/issues)
 
 ---
@@ -944,6 +1039,6 @@ This project is part of the IIT Bombay TechFest 2025 and HCL Hackathon.
 
 ---
 
-**Last Updated**: December 12, 2025  
+**Last Updated**: December 13, 2025  
 **Status**: Active Development  
 **Maintained By**: Himanshu & Team
