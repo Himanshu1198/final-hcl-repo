@@ -8,13 +8,16 @@ export type Role = 'student' | 'mentor' | 'university';
 
 interface User {
   id?: string;
+  name?: string;
   email: string;
   role: Role;
+  createdAt?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string, role: Role) => Promise<void>;
+  signup: (name: string, email: string, password: string, role: Role) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -46,8 +49,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const userData: User = {
         id: data.id,  // MongoDB user ID from backend
+        name: data.name || data.email.split('@')[0],
         email: data.email || email,
         role: data.role || role,
+        createdAt: data.createdAt,
+      };
+
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+    } catch (error: any) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const signup = async (name: string, email: string, password: string, role: Role) => {
+    setIsLoading(true);
+    try {
+      // Call backend signup API
+      const data = await apiClient.post<any>(API_ENDPOINTS.auth.register, {
+        name,
+        email,
+        password,
+        role,
+      });
+
+      const userData: User = {
+        id: data.id,  // MongoDB user ID from backend
+        name: data.name || name,
+        email: data.email || email,
+        role: data.role || role,
+        createdAt: data.createdAt,
       };
 
       setUser(userData);
@@ -65,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
